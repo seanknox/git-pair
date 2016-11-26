@@ -1,8 +1,12 @@
 package main
 
-import "net/http"
-import "encoding/json"
-import "fmt"
+import (
+  "encoding/json"
+  "fmt"
+  "github.com/pborman/getopt"
+  "net/http"
+)
+
 
 type GithubUser struct {
 	Name  string `json:"name"`
@@ -10,7 +14,12 @@ type GithubUser struct {
 }
 
 func main() {
-	resp, err := http.Get("https://api.github.com/users/ryanswood")
+  getopt.Parse()
+
+  commiter1 := getopt.Arg(0)
+  githubGetString := fmt.Sprintf("https://api.github.com/users/%s", commiter1)
+
+	resp, err := http.Get(githubGetString)
 
 	if err != nil {
 		panic(err.Error())
@@ -24,11 +33,3 @@ func main() {
 
 	fmt.Println(ghu)
 }
-
-// body, err := ioutil.ReadAll(resp.Body)
-
-// if err != nil {
-//   panic(err.Error())
-// }
-
-// fmt.Print(body)
