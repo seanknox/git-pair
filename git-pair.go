@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+  "errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -23,8 +24,6 @@ type GithubUser struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
-
-// func (user GithubUser) intials() ()
 
 func init() {
 	client = &http.Client{
@@ -65,6 +64,10 @@ func fetchUserDetails(username string) (user *GithubUser, err error) {
 	if err != nil {
 		return nil, err
 	}
+
+  if (GithubUser{}) == *user {
+    return nil, errors.New("username not found")
+  }
 
 	return user, nil
 }

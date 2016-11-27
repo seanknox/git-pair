@@ -1,4 +1,3 @@
-- Report unfound usernames (e.g. Couldn't find FooFoo on GitHub)
 - Help menu (see bash git-pair script)
 - Clear credential cache
   A. Use credential cache (git config --global credential.helper 'cache --timeout=32400')
