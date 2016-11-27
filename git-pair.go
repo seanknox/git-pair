@@ -3,38 +3,66 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/pborman/getopt"
+	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
+var (
+	// client initializes a default http client for connecting to the github api
+	client *http.Client
+
+	// Timeout specifies the time (in seconds) before an http request should be
+	// canceled
+	timeout = 10 * time.Second
+)
+
+// GithubUser is the name and email of a github user
 type GithubUser struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
-func main() {
-	getopt.Parse()
+func init() {
+	client = &http.Client{
+		Timeout: timeout,
+	}
+}
 
-	if getopt.NArgs() == 0 {
-		fmt.Println("must specify a git author")
-		os.Exit(1)
+func main() {
+	args := os.Args
+	if len(args) < 2 {
+		log.Fatal("expected git author as first argument to 'git-pair'")
 	}
 
-	author := getopt.Arg(0)
-	githubHttpGetString := fmt.Sprintf("https://api.github.com/users/%s", author)
-
-	resp, err := http.Get(githubHttpGetString)
-
+	username := args[1]
+	user, err := fetchUserDetails(username)
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("error fetching github details for %s: %s", username, err)
+	}
+
+	fmt.Printf("User Details\nName: \t%s\nEmail: \t%s\n", user.Name, user.Email)
+}
+
+// fetchUserDetails retrieves the user contact information from the github api.
+// Requests taking longer than 10 seconds will be canceled.
+func fetchUserDetails(username string) (user *GithubUser, err error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/users/%s", username), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
 	}
 
 	defer resp.Body.Close()
+	err = json.NewDecoder(resp.Body).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
 
-	githubAuthorDetails := new(GithubUser)
-
-	json.NewDecoder(resp.Body).Decode(&githubAuthorDetails)
-
-	fmt.Println(githubAuthorDetails)
+	return user, nil
 }
