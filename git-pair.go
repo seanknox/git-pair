@@ -24,6 +24,8 @@ type GithubUser struct {
 	Email string `json:"email"`
 }
 
+// func (user GithubUser) intials() ()
+
 func init() {
 	client = &http.Client{
 		Timeout: timeout,
@@ -33,7 +35,7 @@ func init() {
 func main() {
 	args := os.Args
 	if len(args) < 2 {
-		log.Fatal("expected git author as first argument to 'git-pair'")
+		log.Fatal("please supply at least one GH username to 'git-pair'")
 	}
 
 	username := args[1]
