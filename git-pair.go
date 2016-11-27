@@ -1,12 +1,12 @@
 package main
 
 import (
-  "encoding/json"
-  "fmt"
-  "github.com/pborman/getopt"
-  "net/http"
+	"encoding/json"
+	"fmt"
+	"github.com/pborman/getopt"
+	"net/http"
+	"os"
 )
-
 
 type GithubUser struct {
 	Name  string `json:"name"`
@@ -14,12 +14,17 @@ type GithubUser struct {
 }
 
 func main() {
-  getopt.Parse()
+	getopt.Parse()
 
-  commiter1 := getopt.Arg(0)
-  githubGetString := fmt.Sprintf("https://api.github.com/users/%s", commiter1)
+	if getopt.NArgs() == 0 {
+		fmt.Println("must specify a git author")
+		os.Exit(1)
+	}
 
-	resp, err := http.Get(githubGetString)
+	author := getopt.Arg(0)
+	githubHttpGetString := fmt.Sprintf("https://api.github.com/users/%s", author)
+
+	resp, err := http.Get(githubHttpGetString)
 
 	if err != nil {
 		panic(err.Error())
@@ -27,9 +32,9 @@ func main() {
 
 	defer resp.Body.Close()
 
-	ghu := new(GithubUser)
+	githubAuthorDetails := new(GithubUser)
 
-	json.NewDecoder(resp.Body).Decode(&ghu)
+	json.NewDecoder(resp.Body).Decode(&githubAuthorDetails)
 
-	fmt.Println(ghu)
+	fmt.Println(githubAuthorDetails)
 }
