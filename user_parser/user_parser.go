@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// ParseUsername returns an array of user strings or an error if no arguments provided
 func ParseUsername() ([]string, error) {
 	args := os.Args
 
@@ -12,7 +13,5 @@ func ParseUsername() ([]string, error) {
 		log.Fatal("Please supply at least one GitHub username")
 	}
 
-	// username := args[0]
-	// return username, nil
 	return args, nil
 }
