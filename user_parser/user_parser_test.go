@@ -14,7 +14,7 @@ var _ = Describe("UserParser", func() {
 
 		It("should return an error", func() {
 			os.Args = []string{""}
-			Expect(ParseUsername()).To(Equal(""))
+			Expect(ParseUsername()).To(Equal([]string{""}))
 		})
 	})
 
@@ -22,7 +22,14 @@ var _ = Describe("UserParser", func() {
 
 		It("should return the username", func() {
 			os.Args = []string{"seanknox"}
-			Expect(ParseUsername()).To(Equal("seanknox"))
+			Expect(ParseUsername()).To(Equal([]string{"seanknox"}))
+		})
+	})
+
+	Context("with two usernames provided", func() {
+		It("should return both usernames", func() {
+			os.Args = []string{"seanknox", "jdumars"}
+			Expect(ParseUsername()).To(Equal([]string{"seanknox", "jdumars"}))
 		})
 	})
 })
