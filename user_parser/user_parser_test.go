@@ -1,6 +1,7 @@
 package user_parser_test
 
 import (
+	"fmt"
 	"os"
 
 	. "github.com/seanknox/git-pair/user_parser"
@@ -13,8 +14,10 @@ var _ = Describe("UserParser", func() {
 	Context("without at least one username provided", func() {
 
 		It("should return an error", func() {
-			os.Args = []string{""}
-			Expect(ParseUsername()).To(Equal([]string{""}))
+			os.Args = nil
+			username, err := ParseUsername()
+			Expect(username).To(Equal([]string{""}))
+			Expect(err).To(Equal(fmt.Errorf("Please supply at least one GitHub username")))
 		})
 	})
 

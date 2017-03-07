@@ -1,7 +1,7 @@
 package user_parser
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
@@ -10,7 +10,7 @@ func ParseUsername() ([]string, error) {
 	args := os.Args
 
 	if len(args) < 1 {
-		log.Fatal("Please supply at least one GitHub username")
+		return []string{""}, fmt.Errorf("Please supply at least one GitHub username")
 	}
 
 	return args, nil
