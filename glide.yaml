@@ -1,0 +1,4 @@
+package: github.com/seanknox/git-pair
+import:
+- package: github.com/onsi/ginkgo
+- package: github.com/onsi/gomega

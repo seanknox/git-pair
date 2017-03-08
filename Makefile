@@ -1,25 +1,41 @@
-BINARY = git-pair
-OUT = $(CURDIR)/build
-GO ?= go
-SRCS := $(shell find . -type f -name '*.go' | grep -v ./vendor)
-LDFLAGS ?= "-s -w"
+GO        ?= go
+PKG       := $(shell glide novendor)
+TAGS      :=
+TESTS     := .
+TESTFLAGS :=
+LDFLAGS   :=
+GOFLAGS   :=
+BINDIR    := $(CURDIR)/bin
+APP       := git-pair
 
-.PHONY: all
-all: linux darwin
-
-.PHONY: darwin
-darwin: $(OUT)/$(BINARY)_darwin_amd64
-
-.PHONY: linux
-linux: $(OUT)/$(BINARY)_linux_amd64
-
-$(OUT)/$(BINARY)_darwin_amd64: $(SRCS)
-	GOOS=darwin GOARCH=amd64 $(GO) build -ldflags $(LDFLAGS) -v -o $@
-
-$(OUT)/$(BINARY)_linux_amd64: $(SRCS)
-	GOOS=linux GOARCH=amd64 GOARM=7 $(GO) build -ldflags $(LDFLAGS) -v -o $@
+.PHONY: build
+build:
+	$(GO) build -ldflags $(LDFLAGS) -v -o $(BINDIR)/$(APP)
 
 .PHONY: clean
 clean:
 	rm -frv $(OUT)
 	go clean
+
+.PHONY: test
+test:
+	./bin/ginkgo --skipPackage vendor/ -r
+
+HAS_GLIDE := $(shell command -v glide;)
+HAS_GOX := $(shell command -v gox;)
+HAS_GIT := $(shell command -v git;)
+
+.PHONY: bootstrap
+bootstrap:
+ifndef HAS_GLIDE
+	go get -u github.com/Masterminds/glide
+endif
+ifndef HAS_GOX
+	go get -u github.com/mitchellh/gox
+endif
+
+ifndef HAS_GIT
+	$(error You must install Git)
+endif
+	glide install --strip-vendor
+	go build -o bin/ginkgo ./vendor/github.com/onsi/ginkgo/ginkgo
