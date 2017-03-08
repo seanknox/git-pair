@@ -7,10 +7,11 @@ LDFLAGS   :=
 GOFLAGS   :=
 BINDIR    := $(CURDIR)/bin
 APP       := git-pair
+OUT	 			:= ./bin/$(APP)
 
 .PHONY: build
 build:
-	$(GO) build -ldflags $(LDFLAGS) -v -o $(BINDIR)/$(APP)
+	$(GO) build -ldflags "$(LDFLAGS)" -o $(OUT) cmd/git_pair.go
 
 .PHONY: clean
 clean:

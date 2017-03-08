@@ -1,9 +1,9 @@
-package user_parser_test
+package userparser_test
 
 import (
 	"fmt"
 
-	. "github.com/seanknox/git-pair/user_parser"
+	. "github.com/seanknox/git-pair/pkg/userparser"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

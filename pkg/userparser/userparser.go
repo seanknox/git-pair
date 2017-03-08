@@ -1,4 +1,4 @@
-package user_parser
+package userparser
 
 import "fmt"
 

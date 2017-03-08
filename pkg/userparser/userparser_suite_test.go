@@ -1,4 +1,4 @@
-package user_parser_test
+package userparser_test
 
 import (
 	. "github.com/onsi/ginkgo"

@@ -4,15 +4,15 @@ import (
 	"log"
 	"os"
 
-	"fmt"
+	"github.com/seanknox/git-pair/pkg/userparser"
 
-	. "github.com/seanknox/git-pair/user_parser"
+	"fmt"
 )
 
 func main() {
 	args := os.Args
 
-	usernames, err := ParseUsername(args[1:])
+	usernames, err := userparser.ParseUsername(args[1:])
 	if err != nil {
 		log.Fatal(err)
 	}
