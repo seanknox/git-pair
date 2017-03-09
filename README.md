@@ -1,4 +1,5 @@
 # git-pair
+[![Build Status](http://52.170.46.90/api/badges/seanknox/git-pair/status.svg)](http://52.170.46.90/seanknox/git-pair)
 
 Commit code as multiple people!
 
