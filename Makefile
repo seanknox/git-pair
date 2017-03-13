@@ -1,5 +1,4 @@
 GO        ?= go
-PKG       := $(shell glide novendor)
 TAGS      :=
 TESTS     := .
 TESTFLAGS :=
@@ -20,23 +19,17 @@ clean:
 
 .PHONY: test
 test:
-	./bin/ginkgo --skipPackage vendor/ -r
+	ginkgo --skipPackage vendor/ -r
 
-HAS_GLIDE := $(shell command -v glide;)
-HAS_GOX := $(shell command -v gox;)
+HAS_GINKGO := $(shell command -v ginkgo;)
 HAS_GIT := $(shell command -v git;)
 
 .PHONY: bootstrap
 bootstrap:
-ifndef HAS_GLIDE
-	go get -u github.com/Masterminds/glide
+ifndef HAS_GINKGO
+	go get github.com/onsi/ginkgo/ginkgo
+	go get github.com/onsi/gomega
 endif
-ifndef HAS_GOX
-	go get -u github.com/mitchellh/gox
-endif
-
 ifndef HAS_GIT
 	$(error You must install Git)
 endif
-	glide install --strip-vendor
-	go build -o bin/ginkgo ./vendor/github.com/onsi/ginkgo/ginkgo
