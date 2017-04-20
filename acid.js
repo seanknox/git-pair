@@ -13,6 +13,7 @@ j.env = {
 };
 
 j.tasks = [
+	"echo 'running tests'",
   "make bootstrap",
   "make test"
 ];
