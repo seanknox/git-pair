@@ -6,7 +6,7 @@ localPath = gopath + "/src/github.com/" + pushRecord.repository.full_name;
 
 // Define a single build step:
 j = new Job("unit-tests");
-j.image = "golang:1.7.5";
+j.image = "technosophos/acid-go:latest";
 j.env = {
   "DEST_PATH": localPath,
   "GOPATH": gopath
